@@ -20,9 +20,8 @@ public class UserServiceImpl implements UserService {
     public Users getAll() {
         return null;
     }
-
     @Override
-    public User getUser() {
+    public User getUser(Long user_id) {
         return null;
     }
 
