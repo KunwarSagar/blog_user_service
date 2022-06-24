@@ -13,5 +13,5 @@ public interface UserMapper {
     UserDto UserToUserDto(User user);
 
     @InheritInverseConfiguration
-    User UserDtoToUSer(UserDto userDto);
+    User UserDtoToUser(UserDto userDto);
 }

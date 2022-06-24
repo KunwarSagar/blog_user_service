@@ -39,17 +39,22 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUser(@PathVariable("userId") Long userId){
-        User user = userService.getUser(userId);
-        if(user != null){
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(new UserNotFoundException("User by id "+userId+" not found").getMessage(), HttpStatus.NOT_FOUND);
+        try{
+            User user = userService.getUser(userId);
+            if(user != null){
+                return new ResponseEntity<>(user, HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>(new UserNotFoundException("User by id "+userId+" not found").getMessage(), HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping("")
-    public ResponseEntity<?> addPost(@Valid @RequestBody UserDto userDto){
-        User user = userMapper.UserDtoToUSer(userDto);
+    public ResponseEntity<?> addUser(@Valid @RequestBody UserDto userDto){
+        User user = userMapper.UserDtoToUser(userDto);
+        System.out.println(user);
         User savedUser = userService.save(user);
         if(savedUser != null){
             return new ResponseEntity<>(savedUser, HttpStatus.OK);
@@ -59,8 +64,8 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<?> updateUser(@Valid @RequestBody UserDto userDto, @PathVariable("userId") Long userId){
-        User user = userMapper.UserDtoToUSer(userDto);
+    public ResponseEntity<?> updateUser(@RequestBody UserDto userDto, @PathVariable("userId") Long userId){
+        User user = userMapper.UserDtoToUser(userDto);
         User updatedUser = userService.update(user, userId);
         if(updatedUser != null){
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);

@@ -7,6 +7,10 @@ import com.blogapp.com.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
@@ -16,27 +20,58 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Get all users from the database
+     * @return Users
+     */
     @Override
     public Users getAll() {
-        return null;
+        List<User> userList = userRepository.findAll();
+        Users users = new Users();
+        users.setUsers(userList);
+        return users;
     }
+
+    /**
+     * Get user by user_id
+     * @param user_id
+     * @return User
+     */
     @Override
     public User getUser(Long user_id) {
-        return null;
+        User user = userRepository.findById(user_id)
+                .orElseThrow(()-> new IllegalStateException(
+                        "User by user id " + user_id + " not found"
+                ));
+
+        return user;
     }
 
     @Override
     public User save(User user) {
-        return null;
+        return userRepository.save(user);
     }
 
     @Override
+    @Transactional
     public User update(User user, Long user_id) {
-        return null;
+        User existingUser = userRepository.findById(user_id)
+                .orElseThrow(() -> new IllegalStateException(
+                        "User with id "+ user_id +" doesn't exists."
+                ));
+        existingUser.setValues(user);
+
+        return userRepository.save(existingUser);
     }
 
     @Override
     public Boolean delete(Long user_id) {
-        return null;
+        Optional<User> user = userRepository.findById(user_id);
+        if(!user.isPresent()){
+            return false;
+        }else{
+            userRepository.delete(user.get());
+            return true;
+        }
     }
 }
