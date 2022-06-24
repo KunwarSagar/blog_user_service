@@ -5,7 +5,9 @@ import com.blogapp.com.userservice.model.Users;
 import com.blogapp.com.userservice.repository.UserRepository;
 import com.blogapp.com.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
