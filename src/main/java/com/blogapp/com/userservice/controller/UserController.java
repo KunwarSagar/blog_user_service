@@ -29,6 +29,7 @@ public class UserController {
 
     @GetMapping("")
     public ResponseEntity<?> getUsers(){
+        System.out.println("I am here");
         Users users = userService.getAll();
         if(users.size() > 0){
             return new ResponseEntity<>(users, HttpStatus.OK);
